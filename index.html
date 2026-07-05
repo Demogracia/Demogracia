@@ -228,11 +228,11 @@
   }
   
   .ticker-track span{
-      flex-shrink:0;
-      padding-right:80px;
-      font-size:12px;
-      letter-spacing:.2em;
-      color:var(--paper-dark);
+    flex-shrink:0;
+    white-space:nowrap;
+    font-size:12px;
+    letter-spacing:.2em;
+    color:var(--paper-dark);
   }
   
   @keyframes tickerScroll{
@@ -515,22 +515,9 @@
     </div>
   </div>
 
-  <div class="ticker">
-  <div class="ticker-track">
-    <span>
-      SERIE WEB · PODCAST · TIRAS CÓMICAS ·
-      SERIE WEB · PODCAST · TIRAS CÓMICAS ·
-      SERIE WEB · PODCAST · TIRAS CÓMICAS ·
-      SERIE WEB · PODCAST · TIRAS CÓMICAS ·
-    </span>
-
-    <span>
-      SERIE WEB · PODCAST · TIRAS CÓMICAS ·
-      SERIE WEB · PODCAST · TIRAS CÓMICAS ·
-      SERIE WEB · PODCAST · TIRAS CÓMICAS ·
-      SERIE WEB · PODCAST · TIRAS CÓMICAS ·
-    </span>
-  </div>
+    <div class="ticker">
+      <div class="ticker-track" id="tickerTrack"></div>
+    </div>
 </div>
 </section>
 
@@ -765,6 +752,38 @@
 
     videoGrid.appendChild(box);
   });
+
+    // ---- ticker infinito: se generan copias dinámicamente hasta cubrir 2x el ancho de pantalla ----
+  (function(){
+    const track = document.getElementById('tickerTrack');
+    const base = "SERIE WEB · PODCAST · TIRAS CÓMICAS · ";
+    const item = () => {
+      const s = document.createElement('span');
+      s.textContent = base.repeat(4); // repite el texto varias veces dentro de cada span
+      return s;
+    };
+
+    // agregamos el primer bloque y medimos
+    track.appendChild(item());
+    const oneBlockWidth = track.scrollWidth;
+    const screenWidth = window.innerWidth;
+
+    // cuántas copias necesito para que 1 bloque completo sea >= ancho de pantalla
+    const copiesNeeded = Math.max(2, Math.ceil((screenWidth * 2) / oneBlockWidth));
+
+    for(let i = 1; i < copiesNeeded; i++){
+      track.appendChild(item());
+    }
+
+    // ahora duplicamos TODO una vez más para el loop seamless (mitad = todo el set original)
+    const clone = track.innerHTML;
+    track.innerHTML = clone + clone;
+
+    // ajustamos duración según el ancho total para que la velocidad sea constante
+    const totalWidth = track.scrollWidth / 2;
+    const pxPerSecond = 60; // velocidad deseada
+    track.style.animationDuration = (totalWidth / pxPerSecond) + 's';
+  })();
 </script>
 
 </body>
