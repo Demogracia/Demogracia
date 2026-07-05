@@ -216,19 +216,32 @@
     margin-top:56px;
     border-top:1px solid rgba(236,230,212,0.18);
     border-bottom:1px solid rgba(236,230,212,0.18);
-    padding:12px 0;
     overflow:hidden;
     white-space:nowrap;
+    padding:12px 0;
   }
+  
   .ticker-track{
-    display:inline-block;
-    font-size:12px;letter-spacing:0.2em;
-    color:var(--paper-dark);
-    animation:scroll-left 22s linear infinite;
+      display:flex;
+      width:max-content;
+      animation:tickerScroll 20s linear infinite;
   }
-  @keyframes scroll-left{
-    from{transform:translateX(0);}
-    to{transform:translateX(-50%);}
+  
+  .ticker-track span{
+      flex-shrink:0;
+      padding-right:80px;
+      font-size:12px;
+      letter-spacing:.2em;
+      color:var(--paper-dark);
+  }
+  
+  @keyframes tickerScroll{
+      from{
+          transform:translateX(0);
+      }
+      to{
+          transform:translateX(-50%);
+      }
   }
 
   /* ---------- section base ---------- */
